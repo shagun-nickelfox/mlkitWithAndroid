@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MlkitApp</string>
+    <string name="select_image_for_text_recognition">Select image for text recognition</string>
+    <string name="find_text_button">Find text</string>
+    <string name="find_face_contour_button">Find face contour</string>
+    <string name="find_credit_card">Find Card Number</string>
+    <string name="find_car_number">Find Car Number</string>
+    <string name="permission_denied_photo">Please allow Silk + Sonder to use Storage or Camera permissions in your phone settings and retry. We want to ensure safety for our community members! Thank you.</string>
+    <string name="car_number">Car Number:</string>
+    <string name="card_number">Card Number:</string>
+    <string name="card_expiry">Card Expiry:</string>
+
+</resources>
