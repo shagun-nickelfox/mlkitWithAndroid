@@ -37,7 +37,6 @@ import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -231,7 +230,7 @@ class MainActivity : AppCompatActivity() {
                     if (card.first.isEmpty() || card.second.isEmpty())
                         Toast.makeText(
                             this,
-                            "Please upload a clear image for all details",
+                            "Please upload an another image",
                             Toast.LENGTH_LONG
                         ).show()
                 }
@@ -253,6 +252,12 @@ class MainActivity : AppCompatActivity() {
                     binding.cvCarNumberPlate.isVisible = true
                     binding.cvCardDetails.isVisible = false
                     binding.tvCarNumberInput.text = carNumber
+                    if (carNumber.isEmpty())
+                        Toast.makeText(
+                            this,
+                            "Please upload an another image",
+                            Toast.LENGTH_LONG
+                        ).show()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
@@ -267,10 +272,15 @@ class MainActivity : AppCompatActivity() {
         val lines = recognizedText.split("\n")
         val pattern =
             Regex("^[A-Z]{2}[\\ -]{0,1}[0-9]{1,2}[\\ -]{0,1}[A-Z]{1,2}[\\ -]{0,1}[0-9]{4}$")
-        for (line in lines) {
-            val newLine = line.replace(" ", "")
+        for (i in lines.indices) {
+            val newLine = lines[i].replace(" ", "")
             if (newLine.matches(pattern))
-                number = line
+                number = lines[i]
+            else if (i != lines.size - 1 && (newLine + lines[i + 1].replace(" ", "")).matches(
+                    pattern
+                )
+            )
+                number = newLine + lines[i + 1].replace(" ", "")
         }
         return number
     }
