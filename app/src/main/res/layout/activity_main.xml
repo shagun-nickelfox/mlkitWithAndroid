@@ -120,7 +120,7 @@
         android:layout_width="0dp"
         android:layout_height="55dp"
         android:layout_marginHorizontal="10dp"
-        android:text="@string/find_car_number"
+        android:text="@string/find_vehicle_number"
         app:layout_constraintBottom_toTopOf="@id/button_text"
         app:layout_constraintLeft_toRightOf="@id/buttonCreditCard"
         app:layout_constraintRight_toRightOf="parent" />

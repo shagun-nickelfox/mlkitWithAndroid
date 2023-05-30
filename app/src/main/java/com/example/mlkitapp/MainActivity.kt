@@ -14,6 +14,7 @@ import android.util.Pair
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.esafirm.imagepicker.features.ImagePickerConfig
@@ -227,6 +228,12 @@ class MainActivity : AppCompatActivity() {
                     binding.cvCarNumberPlate.isVisible = false
                     binding.tvCardNumberInput.text = card.first
                     binding.tvCardExpiryInput.text = card.second
+                    if (card.first.isEmpty() || card.second.isEmpty())
+                        Toast.makeText(
+                            this,
+                            "Please upload a clear image for all details",
+                            Toast.LENGTH_LONG
+                        ).show()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
@@ -258,7 +265,8 @@ class MainActivity : AppCompatActivity() {
     private fun extractNumberPlate(recognizedText: String): String {
         var number = ""
         val lines = recognizedText.split("\n")
-        val pattern = Regex("[A-Z]{2}[A-Za-z0-9_]{2}[A-Z]{2}[0-9]{4}")
+        val pattern =
+            Regex("^[A-Z]{2}[\\ -]{0,1}[0-9]{1,2}[\\ -]{0,1}[A-Z]{1,2}[\\ -]{0,1}[0-9]{4}$")
         for (line in lines) {
             val newLine = line.replace(" ", "")
             if (newLine.matches(pattern))
@@ -277,7 +285,7 @@ class MainActivity : AppCompatActivity() {
             if (isCardNumber(line)) {
                 cardNumber = line
             } else if (isExpirationDate(line)) {
-                expirationDate = line
+                expirationDate = line.filter { it.isDigit() || it == '/' }
             } else if (isCardholderName(line)) {
                 cardHolderName = line
             }
@@ -287,13 +295,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isCardNumber(line: String): Boolean {
-        val digitsOnly = line.replace("\\D+".toRegex(), "")
-        return digitsOnly.length in 12..19
+        val newLine = line.replace(" ", "")
+        return newLine.length in 12..19 && newLine.isDigitsOnly()
     }
 
     private fun isExpirationDate(line: String): Boolean {
-        val digitsOnly = line.replace("\\D* \\d{1,2}/\\d{2,4}".toRegex(), "")
-        return digitsOnly.matches(Regex("\\d{1,2}/\\d{2,4}"))
+        return line.matches(Regex("[A-Z ]*\\d{1,2}/\\d{2,4}"))
     }
 
     private fun isCardholderName(line: String): Boolean {
