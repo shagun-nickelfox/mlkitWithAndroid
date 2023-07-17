@@ -14,5 +14,7 @@
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="qr_type">QR Type</string>
     <string name="qr_content">QR content</string>
+    <string name="find_image_labels">Find Image Labels</string>
+    <string name="image_items">Image Items: </string>
 
 </resources>
