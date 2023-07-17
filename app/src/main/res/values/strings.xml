@@ -9,5 +9,6 @@
     <string name="car_number">Car Number:</string>
     <string name="card_number">Card Number:</string>
     <string name="card_expiry">Card Expiry:</string>
+    <string name="text">Text</string>
 
 </resources>

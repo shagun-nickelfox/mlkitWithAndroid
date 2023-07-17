@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.util.Pair
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -146,6 +147,9 @@ class MainActivity : AppCompatActivity() {
             recognizer.process(image)
                 .addOnSuccessListener { texts ->
                     binding.buttonText.isEnabled = true
+                    binding.textLayout.isVisible = true
+                    binding.cvCardDetails.isVisible = false
+                    binding.cvCarNumberPlate.isVisible = false
                     processTextRecognitionResult(texts)
                 }
                 .addOnFailureListener { e ->
@@ -158,6 +162,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun processTextRecognitionResult(texts: Text) {
+        val recognizedText  =  texts.text
+        binding.textTv.text = recognizedText
         val blocks = texts.textBlocks
         if (blocks.size == 0) {
             showToast("No text found")
@@ -225,6 +231,7 @@ class MainActivity : AppCompatActivity() {
                     val card = extractCardDetails(recognizedText)
                     binding.cvCardDetails.isVisible = true
                     binding.cvCarNumberPlate.isVisible = false
+                    binding.textLayout.isVisible = false
                     binding.tvCardNumberInput.text = card.first
                     binding.tvCardExpiryInput.text = card.second
                 }
@@ -245,7 +252,9 @@ class MainActivity : AppCompatActivity() {
                     val carNumber = extractNumberPlate(recognizedText)
                     binding.cvCarNumberPlate.isVisible = true
                     binding.cvCardDetails.isVisible = false
-                    binding.tvCarNumberInput.text = carNumber
+                    binding.textLayout.isVisible = false
+                   // binding.tvCarNumberInput.text = carNumber
+                    binding.tvCarNumberInput.text = carNumber.toString()
                 }
                 .addOnFailureListener { exception ->
                     Toast.makeText(this, exception.message, Toast.LENGTH_LONG).show()
@@ -255,16 +264,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun extractNumberPlate(recognizedText: String): String {
+   /* private fun extractNumberPlate(recognizedText: String): String {
         var number = ""
         val lines = recognizedText.split("\n")
         val pattern = Regex("[A-Z]{2}[A-Za-z0-9_]{2}[A-Z]{2}[0-9]{4}")
         for (line in lines) {
             val newLine = line.replace(" ", "")
-            if (newLine.matches(pattern))
-                number = line
+            Log.d("ML TEXT CHECK", "extractNumberPlate:newline:$newLine ")
+
+            *//**
+             * this code block is only for car number plate
+             *//*
+            *//* val matchResult = pattern.find(newLine)
+             if(matchResult != null)
+                 number = matchResult.value*//*
         }
         return number
+    }*/
+
+    /**
+     * This function extract plate no of all type of multiple vehicles
+     */
+    private fun extractNumberPlate(recognizedText: String): List<String> {
+        val numberPlates = mutableListOf<String>()
+        Log.d("ML TEXT CHECK", "extractNumberPlate:recognizedText: $recognizedText ")
+        val pattern = Regex("[A-Z]{2,4}\\s?\\d{1,2}\\s?[A-Z]{1,3}\\s?\\d{1,4}|[A-Z]{1,2}\\s?\\d{1,4}")
+        pattern.findAll(recognizedText).forEach { matchResult ->
+            Log.d("ML TEXT CHECK", "extractNumberPlate:matchResult: ${matchResult.value} ")
+            val numberPlate = matchResult.value.trim()
+            numberPlates.add(numberPlate)
+        }
+
+        return numberPlates
     }
 
     private fun extractCardDetails(recognizedText: String): Triple<String, String, String> {
@@ -273,16 +304,21 @@ class MainActivity : AppCompatActivity() {
         var expirationDate = ""
         var cardHolderName = ""
 
-        for (line in lines) {
-            if (isCardNumber(line)) {
-                cardNumber = line
-            } else if (isExpirationDate(line)) {
-                expirationDate = line
-            } else if (isCardholderName(line)) {
-                cardHolderName = line
+        lines.forEach { line ->
+            when {
+                (isCardNumber(line)) -> {
+                    cardNumber = line
+                }
+
+                (isExpirationDate(line)) -> {
+                    expirationDate = line
+                }
+
+                (isCardholderName(line)) -> {
+                    cardHolderName = line
+                }
             }
         }
-
         return Triple(cardNumber, expirationDate, cardHolderName)
     }
 
@@ -292,8 +328,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isExpirationDate(line: String): Boolean {
-        val digitsOnly = line.replace("\\D* \\d{1,2}/\\d{2,4}".toRegex(), "")
-        return digitsOnly.matches(Regex("\\d{1,2}/\\d{2,4}"))
+        val digitsOnly = line.replace(Regex("[^0-9/\\-]"), "")
+        return digitsOnly.matches(Regex("\\b\\d{1,2}([/-])\\d{2,4}\\b"))
     }
 
     private fun isCardholderName(line: String): Boolean {
@@ -364,6 +400,7 @@ class MainActivity : AppCompatActivity() {
         val contentResolver = contentResolver
         try {
             bitmap = if (Build.VERSION.SDK_INT < 28) {
+                @Suppress("DEPRECATION")
                 MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
             } else {
                 val source = ImageDecoder.createSource(contentResolver, imageUri)
