@@ -7,6 +7,8 @@ android {
     compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
+    ndkVersion '19.2.5345600'
+
     defaultConfig {
         applicationId "com.example.mlkitapp"
         minSdkVersion 23
@@ -35,7 +37,7 @@ android {
         jvmTarget = '1.8'
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
 }
@@ -66,5 +68,8 @@ dependencies {
 
     //image picker
     implementation 'com.github.esafirm:android-image-picker:3.0.0'
+
+    //image labeling
+    implementation 'com.google.mlkit:image-labeling:17.0.7'
 
 }

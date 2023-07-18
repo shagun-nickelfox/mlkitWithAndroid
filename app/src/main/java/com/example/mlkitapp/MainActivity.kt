@@ -34,9 +34,12 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.google.mlkit.vision.label.ImageLabeling
+import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import java.lang.StringBuilder
 
 
 class MainActivity : AppCompatActivity() {
@@ -61,17 +64,20 @@ class MainActivity : AppCompatActivity() {
         binding.buttonFace.setOnClickListener { runFaceContourDetection() }
         binding.buttonCreditCard.setOnClickListener { getCardDetailsFromCloud() }
         binding.buttonCarNumberPlate.setOnClickListener { getCarNumberPlate() }
+        binding.buttonImageLabel.setOnClickListener { getImageItems() }
         binding.btnScan.setOnClickListener {
             binding.imageView.setImageDrawable(null)
             binding.layoutQR.isVisible = false
             binding.cvCardDetails.isVisible = false
             binding.cvCarNumberPlate.isVisible = false
+            binding.cvImageLabels.isVisible = false
             binding.textLayout.isVisible = false
 
             requestCameraAndStartScanner() }
 
         binding.imageView.setOnClickListener {
             binding.cvCarNumberPlate.isVisible = false
+            binding.cvImageLabels.isVisible = false
             binding.cvCardDetails.isVisible = false
             checkPhotoPermission()
         }
@@ -165,6 +171,7 @@ class MainActivity : AppCompatActivity() {
                     binding.buttonText.isEnabled = true
                     binding.textLayout.isVisible = true
                     binding.cvCardDetails.isVisible = false
+                    binding.cvImageLabels.isVisible = false
                     binding.cvCarNumberPlate.isVisible = false
                     binding.layoutQR.isVisible = false
                     processTextRecognitionResult(texts)
@@ -250,6 +257,7 @@ class MainActivity : AppCompatActivity() {
                     binding.cvCarNumberPlate.isVisible = false
                     binding.textLayout.isVisible = false
                     binding.layoutQR.isVisible = false
+                    binding.cvImageLabels.isVisible = false
                     binding.tvCardNumberInput.text = card.first
                     binding.tvCardExpiryInput.text = card.second
                 }
@@ -258,6 +266,45 @@ class MainActivity : AppCompatActivity() {
                 }
         } else {
             Toast.makeText(this, "Please choose an image", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getImageItems() {
+        if (mSelectedImage != null) {
+            val image = InputImage.fromBitmap(
+                mSelectedImage!!,
+                0
+            )
+
+            val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
+
+            labeler.process(image)
+                .addOnSuccessListener { labels ->
+                    val imageLabels = StringBuilder()
+                    for (label in labels) {
+                        val text = label.text
+                        val confidence = label.confidence
+                        imageLabels.append(
+                            getString(
+                                R.string.image_items_text,
+                                text,
+                                String.format("%.1f", confidence * 100)
+                            )
+                        )
+                    }
+                    binding.cvCarNumberPlate.isVisible = false
+                    binding.cvCardDetails.isVisible = false
+                    binding.textLayout.isVisible = false
+                    binding.layoutQR.isVisible = false
+                    binding.cvImageLabels.isVisible = true
+                    binding.tvImageLabels.text = imageLabels.toString()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(this@MainActivity, "Please select an image", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -273,6 +320,8 @@ class MainActivity : AppCompatActivity() {
                     binding.textLayout.isVisible = false
                     binding.layoutQR.isVisible = false
                    // binding.tvCarNumberInput.text = carNumber
+                    binding.cvImageLabels.isVisible = false
+                    // binding.tvCarNumberInput.text = carNumber
                     binding.tvCarNumberInput.text = carNumber.toString()
                 }
                 .addOnFailureListener { exception ->
@@ -307,7 +356,8 @@ class MainActivity : AppCompatActivity() {
     private fun extractNumberPlate(recognizedText: String): List<String> {
         val numberPlates = mutableListOf<String>()
         Log.d("ML TEXT CHECK", "extractNumberPlate:recognizedText: $recognizedText ")
-        val pattern = Regex("[A-Z]{2,4}\\s?\\d{1,2}\\s?[A-Z]{1,3}\\s?\\d{1,4}|[A-Z]{1,2}\\s?\\d{1,4}")
+        val pattern =
+            Regex("[A-Z]{2,4}\\s?\\d{1,2}\\s?[A-Z]{1,3}\\s?\\d{1,4}|[A-Z]{1,2}\\s?\\d{1,4}")
         pattern.findAll(recognizedText).forEach { matchResult ->
             Log.d("ML TEXT CHECK", "extractNumberPlate:matchResult: ${matchResult.value} ")
             val numberPlate = matchResult.value.trim()
