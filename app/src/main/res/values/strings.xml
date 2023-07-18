@@ -10,5 +10,9 @@
     <string name="card_number">Card Number:</string>
     <string name="card_expiry">Card Expiry:</string>
     <string name="text">Text</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="qr_type">QR Type</string>
+    <string name="qr_content">QR content</string>
 
 </resources>
