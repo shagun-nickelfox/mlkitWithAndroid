@@ -282,7 +282,13 @@ class MainActivity : AppCompatActivity() {
                     for (label in labels) {
                         val text = label.text
                         val confidence = label.confidence
-                        imageLabels.append("$text with $confidence confidence, ")
+                        imageLabels.append(
+                            getString(
+                                R.string.image_items_text,
+                                text,
+                                String.format("%.1f", confidence * 100)
+                            )
+                        )
                     }
                     binding.cvCarNumberPlate.isVisible = false
                     binding.cvCardDetails.isVisible = false
