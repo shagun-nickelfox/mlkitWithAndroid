@@ -29,6 +29,7 @@ import com.example.mlkitapp.mlkit.FaceContourGraphic
 import com.example.mlkitapp.mlkit.GraphicOverlay
 import com.example.mlkitapp.mlkit.MLKitTextRecognitionHelper
 import com.example.mlkitapp.mlkit.TextGraphic
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     // Max height (portrait mode)
     private var mImageMaxHeight: Int? = null
     private lateinit var getImageResultLauncher: ImagePickerLauncher
+    private val cameraPermission = android.Manifest.permission.CAMERA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +61,14 @@ class MainActivity : AppCompatActivity() {
         binding.buttonFace.setOnClickListener { runFaceContourDetection() }
         binding.buttonCreditCard.setOnClickListener { getCardDetailsFromCloud() }
         binding.buttonCarNumberPlate.setOnClickListener { getCarNumberPlate() }
+        binding.btnScan.setOnClickListener {
+            binding.imageView.setImageDrawable(null)
+            binding.layoutQR.isVisible = false
+            binding.cvCardDetails.isVisible = false
+            binding.cvCarNumberPlate.isVisible = false
+            binding.textLayout.isVisible = false
+
+            requestCameraAndStartScanner() }
 
         binding.imageView.setOnClickListener {
             binding.cvCarNumberPlate.isVisible = false
@@ -77,6 +87,12 @@ class MainActivity : AppCompatActivity() {
                         .into(binding.imageView)
                 }
             }
+        }
+    }
+    private val requestCameraPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()){ isGranted->
+        if(isGranted){
+            startScanner()
         }
     }
 
@@ -150,6 +166,7 @@ class MainActivity : AppCompatActivity() {
                     binding.textLayout.isVisible = true
                     binding.cvCardDetails.isVisible = false
                     binding.cvCarNumberPlate.isVisible = false
+                    binding.layoutQR.isVisible = false
                     processTextRecognitionResult(texts)
                 }
                 .addOnFailureListener { e ->
@@ -232,6 +249,7 @@ class MainActivity : AppCompatActivity() {
                     binding.cvCardDetails.isVisible = true
                     binding.cvCarNumberPlate.isVisible = false
                     binding.textLayout.isVisible = false
+                    binding.layoutQR.isVisible = false
                     binding.tvCardNumberInput.text = card.first
                     binding.tvCardExpiryInput.text = card.second
                 }
@@ -253,6 +271,7 @@ class MainActivity : AppCompatActivity() {
                     binding.cvCarNumberPlate.isVisible = true
                     binding.cvCardDetails.isVisible = false
                     binding.textLayout.isVisible = false
+                    binding.layoutQR.isVisible = false
                    // binding.tvCarNumberInput.text = carNumber
                     binding.tvCarNumberInput.text = carNumber.toString()
                 }
@@ -411,4 +430,41 @@ class MainActivity : AppCompatActivity() {
         }
         return bitmap
     }
+    private fun requestCameraAndStartScanner(){
+        if(isPermissionGranted(cameraPermission)){
+            startScanner()
+        }else{
+            requestCameraPermission()
+        }
+    }
+    private fun requestCameraPermission() {
+        when{
+            shouldShowRequestPermissionRationale(cameraPermission)->{
+                cameraPermissionRequest {
+                    openPermissionSetting()
+                }
+            }
+            else->{
+                requestCameraPermissionLauncher.launch(cameraPermission)
+            }
+        }
+    }
+    private fun startScanner(){
+        ImageScannerFragment.startScanner{ barcodes->
+            binding.layoutQR.isVisible = true
+            barcodes.forEach {
+                binding.typeTv.text =
+                    when(it.valueType){
+                        Barcode.TYPE_URL->"URL"
+                        Barcode.TYPE_CONTACT_INFO->"CONTACT_INFO"
+                        Barcode.TYPE_PRODUCT ->"PRODUCT"
+                        else->"OTHER"
+                    }
+                binding.contentTv.text = it.rawValue
+                binding.imageView.setImageResource(R.drawable.checkmark)
+
+            }
+        }.show(supportFragmentManager,null)
+    }
+
 }
