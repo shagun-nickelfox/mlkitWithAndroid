@@ -268,10 +268,11 @@
         app:layout_constraintStart_toEndOf="@id/button_text" />
     <Button
         android:id="@+id/btnScan"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
         android:text="@string/scan_qr_code"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toStartOf="@id/button_image_label"
         app:layout_constraintStart_toStartOf="@id/buttonCreditCard"
         app:layout_constraintBottom_toTopOf="@id/buttonCreditCard"/>
 
@@ -282,7 +283,7 @@
         android:layout_marginStart="10dp"
         android:text="@string/find_image_labels"
         app:layout_constraintBottom_toTopOf="@id/buttonCreditCard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/btnScan"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

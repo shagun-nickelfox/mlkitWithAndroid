@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             binding.layoutQR.isVisible = false
             binding.cvCardDetails.isVisible = false
             binding.cvCarNumberPlate.isVisible = false
+            binding.cvImageLabels.isVisible = false
             binding.textLayout.isVisible = false
 
             requestCameraAndStartScanner() }
@@ -256,6 +257,7 @@ class MainActivity : AppCompatActivity() {
                     binding.cvCarNumberPlate.isVisible = false
                     binding.textLayout.isVisible = false
                     binding.layoutQR.isVisible = false
+                    binding.cvImageLabels.isVisible = false
                     binding.tvCardNumberInput.text = card.first
                     binding.tvCardExpiryInput.text = card.second
                 }
@@ -293,6 +295,7 @@ class MainActivity : AppCompatActivity() {
                     binding.cvCarNumberPlate.isVisible = false
                     binding.cvCardDetails.isVisible = false
                     binding.textLayout.isVisible = false
+                    binding.layoutQR.isVisible = false
                     binding.cvImageLabels.isVisible = true
                     binding.tvImageLabels.text = imageLabels.toString()
                 }
