@@ -28,6 +28,7 @@ import com.example.mlkitapp.databinding.ActivityMainBinding
 import com.example.mlkitapp.mlkit.FaceContourGraphic
 import com.example.mlkitapp.mlkit.GraphicOverlay
 import com.example.mlkitapp.mlkit.MLKitTextRecognitionHelper
+import com.example.mlkitapp.mlkit.ObjectGraphic
 import com.example.mlkitapp.mlkit.TextGraphic
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
@@ -36,6 +37,8 @@ import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
+import com.google.mlkit.vision.objects.ObjectDetection
+import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -65,13 +68,16 @@ class MainActivity : AppCompatActivity() {
         binding.buttonCreditCard.setOnClickListener { getCardDetailsFromCloud() }
         binding.buttonCarNumberPlate.setOnClickListener { getCarNumberPlate() }
         binding.buttonImageLabel.setOnClickListener { getImageItems() }
+        binding.btnObjectDetector.setOnClickListener {
+            runObjectsDetection()
+        }
         binding.btnScan.setOnClickListener {
-            binding.imageView.setImageDrawable(null)
             binding.layoutQR.isVisible = false
             binding.cvCardDetails.isVisible = false
             binding.cvCarNumberPlate.isVisible = false
             binding.cvImageLabels.isVisible = false
             binding.textLayout.isVisible = false
+            binding.graphicOverlay.clear()
 
             requestCameraAndStartScanner() }
 
@@ -95,6 +101,37 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun runObjectsDetection() {
+        binding.cvCarNumberPlate.isVisible = false
+        binding.cvCardDetails.isVisible = false
+        binding.textLayout.isVisible = false
+        binding.layoutQR.isVisible = false
+        binding.cvImageLabels.isVisible = true
+        if (mSelectedImage != null) {
+            val image = InputImage.fromBitmap(mSelectedImage!!, 0)
+            val options = ObjectDetectorOptions.Builder()
+                .setDetectorMode(ObjectDetectorOptions.SINGLE_IMAGE_MODE)
+                .enableMultipleObjects()
+                .enableClassification()  // Optional
+                .build()
+
+            val objectDetector = ObjectDetection.getClient(options)
+
+            objectDetector.process(image)
+                .addOnSuccessListener { detectedObjects ->
+                   detectedObjects.forEach {
+                       binding.graphicOverlay.add(ObjectGraphic(binding.graphicOverlay,it))
+                   }
+                }
+                .addOnFailureListener { e ->
+                    e.printStackTrace()
+                }
+        } else {
+            Toast.makeText(this, "Please choose an image", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private val requestCameraPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()){ isGranted->
         if(isGranted){
