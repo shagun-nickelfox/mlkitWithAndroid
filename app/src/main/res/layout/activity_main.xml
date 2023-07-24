@@ -9,9 +9,9 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:contentDescription="@string/select_image_for_text_recognition"
         android:foregroundGravity="center_horizontal"
         android:scaleType="fitStart"
@@ -34,19 +34,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/image_view"
         app:layout_constraintBottom_toTopOf="@id/btnScan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_view">
 
         <TextView
             android:id="@+id/tvCardNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/card_number"
+            android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/tvCardExpiry"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -55,8 +55,8 @@
             android:id="@+id/tvCardNumberInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:layout_marginStart="5dp"
+            android:textSize="15sp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvCardNumber"
             app:layout_constraintTop_toTopOf="@id/tvCardNumber" />
@@ -67,9 +67,9 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:text="@string/card_expiry"
+            android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvCardNumber" />
 
@@ -77,8 +77,8 @@
             android:id="@+id/tvCardExpiryInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:layout_marginStart="5dp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvCardExpiry"
             app:layout_constraintTop_toTopOf="@id/tvCardExpiry" />
@@ -90,10 +90,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/image_view"
         app:layout_constraintBottom_toTopOf="@id/btnScan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_view">
 
         <TextView
             android:id="@+id/tvCarNumber"
@@ -110,31 +110,34 @@
             android:id="@+id/tvCarNumberInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:layout_marginStart="5dp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvCarNumber"
             app:layout_constraintTop_toTopOf="@id/tvCarNumber" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/textLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/image_view"
-        app:layout_constraintBottom_toTopOf="@id/btnScan">
+        app:layout_constraintBottom_toTopOf="@id/btnScan"
+        app:layout_constraintTop_toBottomOf="@id/image_view">
+
         <TextView
             android:id="@+id/textTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:text="@string/text"
             android:textColor="@color/black"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/textTv"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/textTv"
             android:layout_width="0dp"
@@ -142,54 +145,59 @@
             android:layout_marginStart="5dp"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textTitleTv"
-            app:layout_constraintStart_toEndOf="@id/textTitleTv"/>
+            app:layout_constraintStart_toEndOf="@id/textTitleTv"
+            app:layout_constraintTop_toTopOf="@id/textTitleTv" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutQR"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/btnScan"
-        app:layout_constraintTop_toBottomOf="@id/image_view"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/image_view">
+
         <TextView
             android:id="@+id/typeTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
             android:text="@string/qr_type"
             android:textColor="@color/black"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/typeTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textSize="15sp"
-            app:layout_constraintTop_toTopOf="@id/typeTitleTv"
-            app:layout_constraintStart_toEndOf="@id/typeTitleTv"/>
+            app:layout_constraintStart_toEndOf="@id/typeTitleTv"
+            app:layout_constraintTop_toTopOf="@id/typeTitleTv" />
+
         <TextView
             android:id="@+id/contentTitleTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
             android:text="@string/qr_content"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/typeTitleTv"
-            app:layout_constraintStart_toStartOf="@id/typeTitleTv"/>
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/typeTitleTv"
+            app:layout_constraintTop_toBottomOf="@id/typeTitleTv" />
+
         <TextView
             android:id="@+id/contentTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textSize="15sp"
-            app:layout_constraintTop_toTopOf="@id/contentTitleTv"
-            app:layout_constraintStart_toEndOf="@id/contentTitleTv"/>
+            app:layout_constraintStart_toEndOf="@id/contentTitleTv"
+            app:layout_constraintTop_toTopOf="@id/contentTitleTv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -199,7 +207,7 @@
         android:layout_height="0dp"
         android:layout_marginVertical="10dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/button_image_label"
+        app:layout_constraintBottom_toTopOf="@id/btnObjectDetector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/image_view">
@@ -212,13 +220,13 @@
                 android:id="@+id/tvImageLabels"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="5dp"
-                android:textSize="15sp"
-                android:textColor="@color/black"
                 android:layout_marginHorizontal="10dp"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/black"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -266,15 +274,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_text" />
+
     <Button
         android:id="@+id/btnScan"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/scan_qr_code"
+        android:layout_height="55dp"
         android:layout_marginEnd="10dp"
+        android:text="@string/scan_qr_code"
+        app:layout_constraintBottom_toBottomOf="@id/button_image_label"
         app:layout_constraintEnd_toStartOf="@id/button_image_label"
         app:layout_constraintStart_toStartOf="@id/buttonCreditCard"
-        app:layout_constraintBottom_toTopOf="@id/buttonCreditCard"/>
+        app:layout_constraintTop_toTopOf="@id/button_image_label" />
 
     <Button
         android:id="@+id/button_image_label"
@@ -283,7 +293,16 @@
         android:layout_marginStart="10dp"
         android:text="@string/find_image_labels"
         app:layout_constraintBottom_toTopOf="@id/buttonCreditCard"
-        app:layout_constraintStart_toEndOf="@id/btnScan"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnScan" />
+
+    <Button
+        android:id="@+id/btnObjectDetector"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:text="@string/detect_objects"
+        app:layout_constraintBottom_toTopOf="@id/btnScan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/btnScan" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
