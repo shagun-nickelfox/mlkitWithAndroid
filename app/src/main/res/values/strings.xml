@@ -17,5 +17,6 @@
     <string name="find_image_labels">Find Image Labels</string>
     <string name="image_items">Image Items: </string>
     <string name="image_items_text"><b>%s</b> - %s accuracy \n</string>
+    <string name="detect_objects">Detect Objects</string>
 
 </resources>
