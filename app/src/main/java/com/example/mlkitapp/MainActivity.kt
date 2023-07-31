@@ -42,9 +42,10 @@ import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import dagger.hilt.android.AndroidEntryPoint
 import java.lang.StringBuilder
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -57,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     private var mImageMaxHeight: Int? = null
     private lateinit var getImageResultLauncher: ImagePickerLauncher
     private val cameraPermission = android.Manifest.permission.CAMERA
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -70,6 +70,11 @@ class MainActivity : AppCompatActivity() {
         binding.buttonImageLabel.setOnClickListener { getImageItems() }
         binding.btnObjectDetector.setOnClickListener {
             runObjectsDetection()
+        }
+        binding.btnSmartReply.setOnClickListener {
+            Intent(this,ActionActivity::class.java).apply {
+                startActivity(this)
+            }
         }
         binding.btnScan.setOnClickListener {
             binding.layoutQR.isVisible = false
