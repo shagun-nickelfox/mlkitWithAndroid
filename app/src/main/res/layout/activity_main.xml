@@ -302,7 +302,17 @@
         android:layout_height="55dp"
         android:text="@string/detect_objects"
         app:layout_constraintBottom_toTopOf="@id/btnScan"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnSmartReply"
         app:layout_constraintStart_toStartOf="@id/btnScan" />
+    <Button
+        android:id="@+id/btnSmartReply"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/smart_reply"
+        app:layout_constraintTop_toTopOf="@id/btnObjectDetector"
+        app:layout_constraintBottom_toBottomOf="@id/btnObjectDetector"
+        app:layout_constraintStart_toEndOf="@id/btnObjectDetector"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

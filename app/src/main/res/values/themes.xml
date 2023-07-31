@@ -1,4 +1,4 @@
-<resources >
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.MlkitApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
@@ -13,19 +13,26 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
     <style name="ImagePickerTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">@color/primary_dark_material_dark</item>
         <item name="colorPrimary">@color/primary_material_dark</item>
         <item name="colorOnPrimary">@color/white</item>
     </style>
-   <style name="FullScreenDialogStyle" parent="ThemeOverlay.Material3.Dialog">
-       <item name="windowNoTitle">true</item>
-       <item name="background">@android:color/transparent</item>
-       <item name="android:windowIsFloating">false</item>
-       <item name="android:windowIsTranslucent">true</item>
-       <item name="android:windowContentOverlay">@null</item>
-       <item name="android:backgroundDimEnabled">false</item>
-       <item name="android:windowBackground">@android:color/transparent</item>
-   </style>
+
+    <style name="FullScreenDialogStyle" parent="ThemeOverlay.Material3.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="background">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.MlkitApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
 </resources>
